@@ -23,7 +23,7 @@ export class CoursesController {
   //  Parametros dinamicos
   @Get(':id')
   findOne(@Param(`id`) id: string) {
-    return this.coursesServices.findOne(id);
+    return this.coursesServices.findOne({ id: id });
   }
 
   // Capturando POST
@@ -40,6 +40,6 @@ export class CoursesController {
 
   @Delete(':id')
   destroy(@Param(`id`) id: string) {
-    return this.coursesServices.destroy(id);
+    return this.coursesServices.destroy({ id: id });
   }
 }
