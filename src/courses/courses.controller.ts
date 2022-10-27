@@ -8,6 +8,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { CourseService } from './courses.service';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { CreateCourseDto } from './dto/create-course.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('courses')
 export class CoursesController {
@@ -26,13 +29,13 @@ export class CoursesController {
   // Capturando POST
   @Post()
   //   @HttpCode(204)
-  create(@Body() body) {
-    return this.coursesServices.create(body);
+  create(@Body() CreateCourseDto: CreateCourseDto) {
+    return this.coursesServices.create(CreateCourseDto);
   }
   // Edição
   @Patch(':id')
-  update(@Param(`id`) id: string, @Body() body) {
-    return this.coursesServices.update(id, body);
+  update(@Param(`id`) id: string, @Body() updateCourseDto: UpdateCourseDto) {
+    return this.coursesServices.update(id, updateCourseDto);
   }
 
   @Delete(':id')
