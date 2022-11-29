@@ -17,11 +17,13 @@ export class CourseService {
   ) {}
 
   findAll() {
-    return this.courseRepository.find();
+    return this.courseRepository.find({
+      relations: ['tags']
+    });
   }
 
   findOne({ id: id }) {
-    const course = this.courseRepository.findOne({ where: { id } });
+    const course = this.courseRepository.findOne({ where: { id }, relations: ['tags']} );
 
     if (!course) {
       throw new NotFoundException(`Course ID ${id} not found`);
@@ -47,10 +49,9 @@ export class CourseService {
     const tags =
       updateCourseDto.tags &&
       (await Promise.all(
-        updateCourseDto.tags.map((name: string) =>
-          this.proloadTagByName({ name: name }),
-        ),
+        updateCourseDto.tags.map((name) => this.proloadTagByName({name})),
       ));
+
     const course = await this.courseRepository.preload({
       id: +id,
       ...updateCourseDto,

@@ -9,10 +9,10 @@ import { CoursesModule } from './courses/courses.module';
     CoursesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'db',
       port: 5432,
       username: 'postgres',
-      password: 'docker',
+      password: 'postgres',
       database: 'postgres',
       autoLoadEntities: true,
       synchronize: true,
