@@ -41,6 +41,21 @@ services:
       - db
     networks:
       - postgres
+  
+  dbtest:
+    build: ./docker/postgres
+    container_name: postgres_test_course
+    restart: always
+    tty: true
+    ports:
+      - '3002:5432'
+    volumes:
+      - ./docker/databasetest/dbdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=testdb
+    networks:
+      - postgres
 
 networks:
   postgres:

@@ -1,45 +1,42 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Patch,
+  Delete,
 } from '@nestjs/common';
-import { CourseService } from './courses.service';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesServices: CourseService) {}
+  constructor(private readonly coursesService: CoursesService) {}
 
-  @Get('') // @Get('list') sub rota
+  @Get()
   findAll() {
-    return this.coursesServices.findAll();
-  }
-  //  Parametros dinamicos
-  @Get(':id')
-  findOne(@Param(`id`) id: string) {
-    return this.coursesServices.findOne({ id: id });
+    return this.coursesService.findAll();
   }
 
-  // Capturando POST
-  @Post()
-  //   @HttpCode(204)
-  create(@Body() CreateCourseDto: CreateCourseDto) {
-    return this.coursesServices.create(CreateCourseDto);
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.coursesService.findOne(id);
   }
-  // Edição
+
+  @Post()
+  create(@Body() createCourseDto: CreateCourseDto) {
+    return this.coursesService.create(createCourseDto);
+  }
+
   @Patch(':id')
-  update(@Param(`id`) id: string, @Body() updateCourseDto: UpdateCourseDto) {
-    return this.coursesServices.update(id, updateCourseDto);
+  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
+    return this.coursesService.update(id, updateCourseDto);
   }
 
   @Delete(':id')
-  destroy(@Param(`id`) id: string) {
-    return this.coursesServices.destroy({ id: id });
+  remove(@Param('id') id: string) {
+    return this.coursesService.remove(id);
   }
 }

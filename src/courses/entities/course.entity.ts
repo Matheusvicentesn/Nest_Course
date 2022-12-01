@@ -1,16 +1,20 @@
 import {
+  BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+
 import { Tag } from './tag.entity';
 
 @Entity('courses')
 export class Course {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -18,7 +22,13 @@ export class Course {
   @Column()
   description: string;
 
-  @JoinTable()
-  @ManyToMany(() => Tag, (tag: Tag) => tag.courses, { cascade: true })
-  tags: Tag[]; // string quebra
+  @JoinTable({ name: 'courses_tags' })
+  @ManyToMany(() => Tag, (tag) => tag.courses, {
+    cascade: true,
+  })
+  tags: Tag[];
+
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
+
 }
