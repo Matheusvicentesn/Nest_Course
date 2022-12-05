@@ -10,5 +10,5 @@ export class CreatePostDto {
   content: string;
 
   @IsEmail()
-  authorEmail: number;
+  authorEmail: string;
 }

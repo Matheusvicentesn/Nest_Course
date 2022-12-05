@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { NotFoundError } from 'src/common/errors/types/NotFoundError';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
@@ -9,13 +11,41 @@ export class PostsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(postData: CreatePostDto): Promise<PostEntity> {
+    const { authorEmail } = postData;
+    delete postData.authorEmail;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: authorEmail,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundError('Author not found.');
+    }
+
+    const data: Prisma.PostCreateInput = {
+      ...postData,
+      author: {
+        connect: {
+          email: authorEmail,
+        },
+      },
+    };
     return this.prisma.post.create({
-      data: postData,
+      data,
     });
   }
 
   async findAll(): Promise<PostEntity[]> {
-    return this.prisma.post.findMany();
+    return this.prisma.post.findMany({
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number): Promise<PostEntity> {
@@ -23,15 +53,60 @@ export class PostsRepository {
       where: {
         id,
       },
+      include: {
+        author: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
   }
 
   async update(id: number, postData: UpdatePostDto): Promise<PostEntity> {
+    const { authorEmail } = postData;
+
+    if (!authorEmail) {
+      return this.prisma.post.update({
+        where: {
+          id,
+        },
+        data: postData,
+      });
+    }
+    delete postData.authorEmail;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: authorEmail,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundError('Author not found.');
+    }
+
+    const data: Prisma.PostUpdateInput = {
+      ...postData,
+      author: {
+        connect: {
+          email: authorEmail,
+        },
+      },
+    };
+
     return this.prisma.post.update({
       where: {
         id,
       },
-      data: postData,
+      data,
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
   }
 
