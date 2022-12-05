@@ -25,7 +25,7 @@
 - Criar recursos para customização da manipulação de erros com o NestJS.
 
 <p align="center">
-  <a href="https://www.udemy.com/certificate/UC-d0450c1d-8b86-41c9-866f-32fcc38b5744/" target="blank"><img src="https://iili.io/HCk8sf9.png" width="400" /></a>
+  <a href="https://www.udemy.com/certificate/UC-d0450c1d-8b86-41c9-866f-32fcc38b5744/" target="blank"><img src="https://iili.io/HCk8sf9.png" width="800" /></a>
 </p>
 
 
